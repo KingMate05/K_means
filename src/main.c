@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
-#include <time.h> // Ajout pour la version séquentielle
+#include <time.h>
 #include "../include/image.h"
+#include "../include/kmeans.h"
 
-#define K 20        // Nombre de clusters
-#define MAX_ITER 15 // Nombre maximal d'itérations
+#define K 20
+#define MAX_ITER 15
 
 int main(int argc, char **argv)
 {
@@ -45,6 +46,13 @@ int main(int argc, char **argv)
         }
     }
 
+    if (img->data == NULL)
+    {
+        fprintf(stderr, "Processus %d : Erreur, image non allouée avant MPI_Bcast\n", rank);
+        MPI_Abort(MPI_COMM_WORLD, 1);
+        return 1;
+    }
+
     MPI_Bcast(img->data, img_dims[0] * img_dims[1] * sizeof(Pixel), MPI_BYTE, 0, MPI_COMM_WORLD);
     printf("Processus %d : Pixels de l’image reçus.\n", rank);
 
@@ -58,6 +66,7 @@ int main(int argc, char **argv)
     KMeans_MPI(img, K, MAX_ITER, rank, size);
 
     MPI_Barrier(MPI_COMM_WORLD);
+    printf("Processus %d : Fin de K-Means.\n", rank);
 
     if (rank == 0)
     {

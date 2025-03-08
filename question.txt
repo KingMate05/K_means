@@ -3,3 +3,9 @@ Pour cela, on divise l'image plusieurs portions et on attribut une partie à cha
 Ensuite on peut calculer localement les distances entre pixels et centroïdes, et regrouper les résultats.
 
 Quel gain de performance avez-vous observé ? 
+Avec K 20 :
+Temps d'exécution (séquentiel) : 52.926050 secondes
+Temps d'exécution (MPI avec 4 processus) : 27.434395 secondes
+
+On remarque que la version parallèle est presque 2 fois plus rapide.
+On pourrait améliorer encore les performances en augmentant le nombre de processus.

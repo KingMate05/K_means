@@ -1,15 +1,23 @@
 CC = mpicc
-CFLAGS = -Wall -Wextra -std=c11 -Iinclude -I/usr/lib/x86_64-linux-gnu/openmpi/include 
+MPICC = mpicc
+CFLAGS = -Wall -Wextra -std=c11 -Iinclude
 LDFLAGS = -lm
 
-SRC = src/image.c src/main.c 
-OBJ = $(SRC:.c=.o)
-EXEC = tp_kmeans_mpi
+SRC_SEQ = src/image.c src/kmeans.c src/main_seq.c
+OBJ_SEQ = $(SRC_SEQ:.c=.o)
+EXEC_SEQ = tp_kmeans_seq
 
-all: $(EXEC)
+SRC_MPI = src/image.c src/kmeans.c src/main.c
+OBJ_MPI = $(SRC_MPI:.c=.o)
+EXEC_MPI = tp_kmeans_mpi
 
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) -o $(EXEC) $(OBJ) $(LDFLAGS)  # Ajout de $(LDFLAGS)
+all: $(EXEC_SEQ) $(EXEC_MPI)
+
+$(EXEC_SEQ): $(OBJ_SEQ)
+	$(MPICC) $(CFLAGS) -o $(EXEC_SEQ) $(OBJ_SEQ) $(LDFLAGS)
+
+$(EXEC_MPI): $(OBJ_MPI)
+	$(MPICC) $(CFLAGS) -o $(EXEC_MPI) $(OBJ_MPI) $(LDFLAGS)
 
 clean:
-	rm -f $(OBJ) $(EXEC)
+	rm -f src/*.o $(EXEC_SEQ) $(EXEC_MPI)

@@ -19,6 +19,4 @@ Image *Charger(const char *fichier);
 int Sauver(Image *img, const char *fichier);
 void DelImage(Image *img);
 
-void KMeans_MPI(Image *img, int k, int max_iter, int rank, int size);
-
 #endif
