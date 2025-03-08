@@ -1,0 +1,5 @@
+Comment assurer une bonne répartition des calculs entre les processus ?
+Pour cela, on divise l'image plusieurs portions et on attribut une partie à chaque processus pour qu’il traite uniquement ses propres pixels.
+Ensuite on peut calculer localement les distances entre pixels et centroïdes, et regrouper les résultats.
+
+Quel gain de performance avez-vous observé ? 
